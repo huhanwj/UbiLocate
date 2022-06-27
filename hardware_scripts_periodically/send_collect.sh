@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # ssh logins
-us="imdea"
-pw="imdea"
+us="admin"
+pw="abcd123"
 
 # rx and tx numbers
 tx="3"
@@ -42,13 +42,13 @@ mkdir ../traces
 echo "remove phase jumps"
 
 for rx in $rxs ; do
-  sshpass -p ${pw} ssh ${us}@192.168.2.${rx} /jffs/send_periodically/./disable_phase_jumps.sh
+  sshpass -p ${pw} ssh ${us}@192.168.50.${rx} /jffs/send_periodically/./disable_phase_jumps.sh
 done
 
 # collect the CSI data
 echo "Collecting"
 for rx in $rxs ; do
-  sshpass -p ${pw} ssh ${us}@192.168.2.${rx} /jffs/send_periodically/./collectcsi.sh trace.pcap &  
+  sshpass -p ${pw} ssh ${us}@192.168.50.${rx} /jffs/send_periodically/./collectcsi.sh trace.pcap &  
 done
 
 # sleep just in case
@@ -56,13 +56,13 @@ sleep 2
 
 # send the # of packets with BW and number of spatial streams 
 echo "Sending"
-sshpass -p ${pw} ssh ${us}@192.168.2.${tx} /jffs/send_periodically/./send.sh ${pkts} ${nss} 
+sshpass -p ${pw} ssh ${us}@192.168.50.${tx} /jffs/send_periodically/./send.sh ${pkts} ${nss} 
 sleep 5 
 
 echo kill the collection of the routers
 echo "Killing"
 for rx in $rxs ; do
-  sshpass -p ${pw} ssh ${us}@192.168.2.${rx} /usr/bin/killall tcpdump  
+  sshpass -p ${pw} ssh ${us}@192.168.50.${rx} /usr/bin/killall tcpdump  
 done
 
 # create the folder to store the csi traces
@@ -70,7 +70,7 @@ mkdir ../traces/${name}/
 
 # move everything to traces
 for rx in $rxs ; do
-  sshpass -p imdea scp imdea@192.168.2.${rx}:/tmp/trace.pcap ../traces/${name}/trace${rx}.pcap
+  sshpass -p imdea scp imdea@192.168.50.${rx}:/tmp/trace.pcap ../traces/${name}/trace${rx}.pcap
 done
 
 #

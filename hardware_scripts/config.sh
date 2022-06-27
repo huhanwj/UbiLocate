@@ -2,8 +2,8 @@
 # number of spatial stream
 
 # ssh logins
-us="imdea" # change it
-ps="imdea" # change it
+us="admin" # change it
+ps="abcd123" # change it
 
 # rx and tx numbers
 tx="3"
@@ -53,16 +53,16 @@ esac
 
 
 echo "Setting up the transmitter"
-sshpass -p ${ps} ssh ${us}@192.168.2.${tx} /jffs/LEGACY160/./configcsi.sh 157 80 
+sshpass -p ${ps} ssh ${us}@192.168.50.${tx} /jffs/LEGACY160/./configcsi.sh 157 80 
 
 #sshpass -p ${ps} ssh ${us}@192.168.2.${tx} /usr/sbin/wl -i eth6 txchain $nss_mask
-sshpass -p ${ps} ssh ${us}@192.168.2.${tx} /usr/sbin/wl -i eth6 txcore -k ${nss_mask} -o ${nss_mask} -s  ${nss} -c ${nss_mask}
+sshpass -p ${ps} ssh ${us}@192.168.50.${tx} /usr/sbin/wl -i eth6 txcore -k ${nss_mask} -o ${nss_mask} -s  ${nss} -c ${nss_mask}
 
 echo "Setting up the receiver"
 
 for rx in $rxs ; do
-  sshpass -p ${ps} ssh ${us}@192.168.2.${rx} /jffs/csisoftware/./configcsi.sh ${nss}
-  sshpass -p ${ps} ssh ${us}@192.168.2.${rx} /jffs/csisoftware/./setdumpparameters.sh 2 0 
+  sshpass -p ${ps} ssh ${us}@192.168.50.${rx} /jffs/csisoftware/./configcsi.sh ${nss}
+  sshpass -p ${ps} ssh ${us}@192.168.50.${rx} /jffs/csisoftware/./setdumpparameters.sh 2 0 
 done
 
 
@@ -70,8 +70,8 @@ echo "Setting the channel and BW"
 
 echo ${ch}/${bw}
 
-sshpass -p ${ps} ssh ${us}@192.168.2.${tx} /usr/sbin/wl -i eth6 chanspec ${ch}/${bw}
+sshpass -p ${ps} ssh ${us}@192.168.50.${tx} /usr/sbin/wl -i eth6 chanspec ${ch}/${bw}
 for rx in $rxs ; do
-  sshpass -p ${ps} ssh ${us}@192.168.2.${rx} /usr/sbin/wl -i eth6 chanspec ${ch}/${bw}
+  sshpass -p ${ps} ssh ${us}@192.168.50.${rx} /usr/sbin/wl -i eth6 chanspec ${ch}/${bw}
 done
 

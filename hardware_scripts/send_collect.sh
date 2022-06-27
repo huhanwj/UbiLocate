@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # ssh logins
-us="imdea"
-pw="imdea"
+us="admin"
+pw="abcd123"
 
 # rx and tx numbers
 tx="3"
@@ -65,14 +65,14 @@ sleep 2
 
 # send the # of packets with BW and number of spatial streams 
 echo "Sending"
-sshpass -p ${pw} ssh ${us}@192.168.2.${tx} /jffs/LEGACY160/./send.sh 80 ${nss} ${pkts}
+sshpass -p ${pw} ssh ${us}@192.168.50.${tx} /jffs/LEGACY160/./send.sh 80 ${nss} ${pkts}
 
 sleep 1 
 
 echo kill the collection of the routers
 echo "Killing"
 for rx in $rxs ; do
-  sshpass -p ${pw} ssh ${us}@192.168.2.${rx} /usr/bin/killall tcpdump  
+  sshpass -p ${pw} ssh ${us}@192.168.50.${rx} /usr/bin/killall tcpdump  
 done
 
 # create the folder to store the csi traces
@@ -80,7 +80,7 @@ mkdir ../traces/${name}/
 
 # move everything to traces
 for rx in $rxs ; do
-  sshpass -p imdea scp imdea@192.168.2.${rx}:/tmp/trace.pcap ../traces/${name}/trace${rx}.pcap
+  sshpass -p imdea scp imdea@192.168.50.${rx}:/tmp/trace.pcap ../traces/${name}/trace${rx}.pcap
 done
 
 #
